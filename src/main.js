@@ -28,7 +28,7 @@ async function getTrendingMovies() {
   const data = await res.json();
   const movies = data.results;
 
-  const moviesSection = document.getElementById("movies-container");
+  moviesContainer.innerHTML = "";
   movies.forEach((movie) => {
     //Create elements HTML
     const movieCard = document.createElement("div");
@@ -43,7 +43,7 @@ async function getTrendingMovies() {
     );
 
     //Appenchild to html
-    moviesSection.appendChild(movieCard);
+    moviesContainer.appendChild(movieCard);
     movieCard.appendChild(titleMovie);
     movieCard.appendChild(imageMovie);
 
@@ -66,7 +66,7 @@ async function getCategoriesMovies() {
   const data = await res.json();
   const categoriesMovies = data.genres;
 
-  const categoriesArticle = document.getElementById("categories-list");
+  categoriesList.innerHTML = "";
   categoriesMovies.forEach((categoryMovie) => {
     //Create elements HTML
     const categoryCard = document.createElement("div");
@@ -79,7 +79,7 @@ async function getCategoriesMovies() {
     categoryName.innerText = categoryMovie.name;
 
     //Appenchild to html
-    categoriesArticle.appendChild(categoryCard);
+    categoriesList.appendChild(categoryCard);
     categoryCard.appendChild(categoryColor);
     categoryCard.appendChild(categoryName);
 
@@ -92,6 +92,53 @@ async function getCategoriesMovies() {
       "rounded",
       "m-2",
       `bg-[${color}]`
+    );
+
+    //Add Event Click on Title
+    categoryName.addEventListener("click", () => {
+      location.hash = `#category=${categoryMovie.id}-${categoryMovie.name}`;
+      getFilteredCategory(categoryMovie.id);
+    });
+  });
+}
+
+//crear el html de la nueva sección y hacer función reutilizable
+async function getFilteredCategory(categoryId) {
+  console.log(categoryId, "category");
+  const res = await fetch(
+    `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&with_genres=${categoryId}`
+  );
+  const data = await res.json();
+  console.log(data.results, "data");
+  const movies = data.results;
+
+  moviesContainer.innerHTML = "";
+  movies.forEach((movie) => {
+    //Create elements HTML
+    const movieCard = document.createElement("div");
+    const titleMovie = document.createElement("p");
+    const imageMovie = document.createElement("img");
+
+    //ATRIBUTES IMG
+    imageMovie.setAttribute("alt", movie.original_title);
+    imageMovie.setAttribute(
+      "src",
+      `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+    );
+
+    //Appenchild to html
+    moviesContainer.appendChild(movieCard);
+    movieCard.appendChild(titleMovie);
+    movieCard.appendChild(imageMovie);
+
+    //CSS
+    titleMovie.classList.add("font-bold", "text-base");
+    movieCard.classList.add("flex-shrink-0", "w-44", "h-40", "rounded-xs");
+    imageMovie.classList.add(
+      "w-full",
+      "h-full",
+      "rounded-[10px]",
+      "object-cover"
     );
   });
 }
