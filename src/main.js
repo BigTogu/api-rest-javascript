@@ -1,3 +1,26 @@
+const colorsId = {
+  28: "#F59E0B",
+  12: "#EF4444",
+  16: "#10B981",
+  35: "#3B82F6",
+  80: "#6366F1",
+  99: "#8B5CF6",
+  18: "#A855F7",
+  10751: "#F59E0B",
+  14: "#EF4444",
+  36: "#10B981",
+  27: "#3B82F6",
+  10402: "#6366F1",
+  9648: "#8B5CF6",
+  10749: "#A855F7",
+  878: "#F59E0B",
+  10770: "#EF4444",
+  53: "#10B981",
+  10752: "#3B82F6",
+  37: "#6366F1",
+};
+let scrolling;
+
 async function getTrendingMovies() {
   const res = await fetch(
     `https://api.themoviedb.org/3/trending/movie/day?api_key=${API_KEY}`
@@ -36,7 +59,42 @@ async function getTrendingMovies() {
   });
 }
 
-let scrolling;
+async function getCategoriesMovies() {
+  const res = await fetch(
+    `https://api.themoviedb.org/3/genre/movie/list?api_key=${API_KEY}`
+  );
+  const data = await res.json();
+  const categoriesMovies = data.genres;
+
+  const categoriesArticle = document.getElementById("categories-list");
+  categoriesMovies.forEach((categoryMovie) => {
+    //Create elements HTML
+    const categoryCard = document.createElement("div");
+    const categoryColor = document.createElement("div");
+    const categoryName = document.createElement("p");
+
+    const color = colorsId[categoryMovie.id];
+
+    //Add Text to element p
+    categoryName.innerText = categoryMovie.name;
+
+    //Appenchild to html
+    categoriesArticle.appendChild(categoryCard);
+    categoryCard.appendChild(categoryColor);
+    categoryCard.appendChild(categoryName);
+
+    //CSS
+    categoryCard.classList.add("flex", "flex-row", "items-center");
+    categoryName.classList.add("font-bold", "text-base");
+    categoryColor.classList.add(
+      "w-6",
+      "h-6",
+      "rounded",
+      "m-2",
+      `bg-[${color}]`
+    );
+  });
+}
 
 function animationRotate() {
   const movieCards = document.getElementsByClassName("flex-shrink-0");
@@ -60,9 +118,10 @@ function animationRotate() {
       //set timeout to remove class after animation
       setTimeout(function () {
         movieCards[i].classList.remove("card-animation-out");
-      }, 100);
+      }, 1000);
     }
-  }, 100);
+  }, 1000);
 }
 
 getTrendingMovies();
+getCategoriesMovies();
