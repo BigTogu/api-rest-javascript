@@ -1,0 +1,35 @@
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+@keyframes rotateCard {
+  from {
+    transform: perspective(500px) rotateY(0deg);
+  }
+  to {
+    transform: perspective(500px) rotateY(25deg);
+  }
+}
+
+@keyframes rotateCardOut {
+  from {
+    transform: perspective(500px) rotateY(25deg);
+  }
+  to {
+    transform: perspective(500px) rotateY(0deg);
+  }
+}
+
+.card-animation {
+  animation: rotateCard 0.8s ease-in-out;
+  /* Mantener el último estado */
+  animation-fill-mode: forwards;
+}
+
+.card-animation-out {
+  animation: rotateCardOut 0.3s ease-in-out;
+  animation-fill-mode: forwards;
+}
