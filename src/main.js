@@ -174,14 +174,11 @@ async function getMoviesBySearch(query) {
   const data = await res.json();
 
   const movies = data.results;
-  console.log(movies, "movies");
 
   createMovies(movies, moviesSearchCards);
 }
 
 function animationRotate() {
-  console.log("hola ");
-
   const movieCards = document.getElementsByClassName("flex-shrink-0");
   //Add class while scrolling
   for (let i = 0; i < movieCards.length; i++) {

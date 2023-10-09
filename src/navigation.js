@@ -15,7 +15,6 @@ function navigator() {
   if (location.hash.startsWith("#trends")) {
     trendsPage();
   } else if (location.hash.startsWith("#search")) {
-    console.log("Hola");
     searchPage();
   } else if (location.hash.startsWith("#movie=")) {
     movieDetailsPage();
@@ -72,7 +71,6 @@ function searchPage() {
   title.classList.add("inactive");
   const [_, query] = location.hash.split("=");
   const replacedQuery = query.replace("%20", "+");
-  console.log(replacedQuery, "replacequery");
 
   //añadir titulo categoria
   headerCategoryTitle.innerHTML = searchInput.value;
