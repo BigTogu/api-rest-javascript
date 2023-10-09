@@ -21,14 +21,9 @@ const colorsId = {
 };
 let scrolling;
 
-async function getTrendingMovies() {
-  const res = await fetch(
-    `https://api.themoviedb.org/3/trending/movie/day?api_key=${API_KEY}`
-  );
-  const data = await res.json();
-  const movies = data.results;
+const createMovies = (movies, container) => {
+  container.innerHTML = ""; //limpiar secciones
 
-  moviesContainer.innerHTML = "";
   movies.forEach((movie) => {
     //Create elements HTML
     const movieCard = document.createElement("div");
@@ -43,20 +38,62 @@ async function getTrendingMovies() {
     );
 
     //Appenchild to html
-    moviesContainer.appendChild(movieCard);
-    movieCard.appendChild(titleMovie);
+    container.appendChild(movieCard);
+    //movieCard.appendChild(titleMovie);
     movieCard.appendChild(imageMovie);
 
     //CSS
-    titleMovie.classList.add("font-bold", "text-base");
-    movieCard.classList.add("flex-shrink-0", "w-44", "h-40", "rounded-xs");
+    //titleMovie.classList.add("font-bold", "text-base");
+    movieCard.classList.add(
+      "flex-shrink-0",
+      "w-32",
+      "h-52",
+      "rounded-md",
+      "flex",
+      "items-center",
+      "mt-5"
+    );
     imageMovie.classList.add(
       "w-full",
       "h-full",
-      "rounded-[10px]",
+      "items-center",
+      "rounded-md",
       "object-cover"
     );
+
+    movieCard.style.boxShadow = "rgb(248, 246, 257, 0.05) 4px -3px 11px 0px";
+
+    movieCard.addEventListener("click", () => {
+      location.hash = "#movie=" + movie.id;
+
+      headerSection.style.backgroundImage = `url("https://image.tmdb.org/t/p/w1280${movie.poster_path}")`;
+
+      headerSection.style.backgroundSize = "cover";
+      headerSection.style.backgroundPosition = "center 35%";
+
+      headerSection.classList.remove("bg-gradient-to-r");
+      headerTitle.classList.add("inactive");
+      headerSearchTitle.classList.remove("inactive");
+      categoriesContainer.classList.add("inactive");
+      title.classList.add("inactive");
+    });
   });
+};
+
+async function getTrendingMovies() {
+  const res = await fetch(
+    `https://api.themoviedb.org/3/trending/movie/day?api_key=${API_KEY}`
+  );
+  const data = await res.json();
+  const movies = data.results;
+  const headerSection = document.getElementById("header");
+  if (movies[0] && movies[0].poster_path) {
+    headerSection.style.backgroundImage = `url("https://image.tmdb.org/t/p/w1280${movies[0].poster_path}")`;
+    headerSection.style.backgroundSize = "cover";
+    headerSection.style.backgroundPosition = "center 35%";
+  }
+
+  createMovies(movies, moviesContainer);
 }
 
 async function getCategoriesMovies() {
@@ -85,67 +122,67 @@ async function getCategoriesMovies() {
 
     //CSS
     categoryCard.classList.add("flex", "flex-row", "items-center");
-    categoryName.classList.add("font-bold", "text-base");
-    categoryColor.classList.add(
-      "w-6",
-      "h-6",
-      "rounded",
-      "m-2",
-      `bg-[${color}]`
+    categoryName.classList.add(
+      "font-medium",
+      "text-base",
+      "rounded-2xl",
+      "bg-[#1E293B]",
+      "py-2",
+      "px-4"
     );
+
+    const originalBgColor = "#1E293B";
+
+    // Cambia el color de fondo de categoryName cuando el mouse entra en categoryCard
+    categoryCard.addEventListener("mouseover", () => {
+      categoryName.style.backgroundColor = color;
+    });
+
+    // Revierte el color de fondo de categoryName cuando el mouse sale de categoryCard
+    categoryCard.addEventListener("mouseout", () => {
+      categoryName.style.backgroundColor = originalBgColor;
+    });
+    // categoryColor.classList.add(
+    //   "w-6",
+    //   "h-6",
+    //   "rounded",
+    //   "m-2",
+    //   `bg-[${color}]`
+    // );
 
     //Add Event Click on Title
     categoryName.addEventListener("click", () => {
       location.hash = `#category=${categoryMovie.id}-${categoryMovie.name}`;
-      getFilteredCategory(categoryMovie.id);
     });
   });
 }
 
 //crear el html de la nueva sección y hacer función reutilizable
 async function getFilteredCategory(categoryId) {
-  console.log(categoryId, "category");
   const res = await fetch(
     `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&with_genres=${categoryId}`
   );
   const data = await res.json();
-  console.log(data.results, "data");
   const movies = data.results;
 
-  moviesContainer.innerHTML = "";
-  movies.forEach((movie) => {
-    //Create elements HTML
-    const movieCard = document.createElement("div");
-    const titleMovie = document.createElement("p");
-    const imageMovie = document.createElement("img");
+  createMovies(movies, moviesCategoryCards);
+}
 
-    //ATRIBUTES IMG
-    imageMovie.setAttribute("alt", movie.original_title);
-    imageMovie.setAttribute(
-      "src",
-      `https://image.tmdb.org/t/p/w500${movie.poster_path}`
-    );
+async function getMoviesBySearch(query) {
+  const res = await fetch(
+    `https://api.themoviedb.org/3/search/movie?query=${query}&api_key=${API_KEY}`
+  );
+  const data = await res.json();
+  const movies = data.results;
+  console.log(movies, "movies");
 
-    //Appenchild to html
-    moviesContainer.appendChild(movieCard);
-    movieCard.appendChild(titleMovie);
-    movieCard.appendChild(imageMovie);
-
-    //CSS
-    titleMovie.classList.add("font-bold", "text-base");
-    movieCard.classList.add("flex-shrink-0", "w-44", "h-40", "rounded-xs");
-    imageMovie.classList.add(
-      "w-full",
-      "h-full",
-      "rounded-[10px]",
-      "object-cover"
-    );
-  });
+  createMovies(movies, moviesSearchCards);
 }
 
 function animationRotate() {
-  const movieCards = document.getElementsByClassName("flex-shrink-0");
+  console.log("hola ");
 
+  const movieCards = document.getElementsByClassName("flex-shrink-0");
   //Add class while scrolling
   for (let i = 0; i < movieCards.length; i++) {
     movieCards[i].classList.add("card-animation");
@@ -165,9 +202,9 @@ function animationRotate() {
       //set timeout to remove class after animation
       setTimeout(function () {
         movieCards[i].classList.remove("card-animation-out");
-      }, 1000);
+      }, 300);
     }
-  }, 1000);
+  }, 300);
 }
 
 getTrendingMovies();

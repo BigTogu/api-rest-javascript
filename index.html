@@ -12,20 +12,59 @@
 </head>
 
 <body>
-  <h1 class="text-3xl font-bold m-5">API Movies</h1>
+  <header id="header" class="w-full relative flex h-[70vh] bg-gradient-to-r from-[#5234a49d] to-[#5a87faa8] shadow-md ">
+    <div class="flex flex-col justify-center items-center h-full z-50">
+      <h1 id="header-title--app"
+        class="absolute top-1/3 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white text-3xl font-bold px-5 flex justify-center">
+        API Movies
+      </h1>
+      <form id="searchForm"
+        class="w-2/3 mt-2 rounded-lg flex absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+        <input class="bg-[#1E293B] rounded-s-lg pl-4 py-3 flex-grow text-white" type="text"
+          placeholder="Search movie" />
+        <button id="searchBtn" class="rounded-e-lg py-1 w-[10%] bg-[#10141E]">🔍</button>
+      </form>
+    </div>
 
-  <button id="navigation-button" class="py-0.5 px-2 rounded bg-red-500">Ver más</button>
+    <div class="w-full  h-[70vh] bg-gradient-to-r from-transparent to-black/90"></div>
+  </header>
 
-  <article onscroll="animationRotate()" id="movies-container"
-    class="flex flex-row gap-5 overflow-x-auto py-4 m-5 w-[95%]">
-  </article>
 
-  <section id="categories-container" class="flex flex-col gap-5 py-4 m-5">
-    <h2 id="category-title" class="font-bold text-xl">Categorías</h2>
-    <article id="categories-list" class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 w-full">
 
+  <main class="bg-[#10141E]">
+    <section id="categories-container" class="flex flex-col gap-5 py-9 px-5">
+      <h2 id="category-title" class="text-white font-bold text-xl">Categorías</h2>
+      <article id="categories-list" class="text-white flex flex-row flex-wrap gap-5 justify-center w-full">
+
+      </article>
+    </section>
+
+
+    <article id="trending-container" class="flex flex-col px-5 py-5 w-full">
+      <h1 id="title" class="text-white font-bold text-xl ">Movies</h1>
+      <section id="movies-container" onscroll="animationRotate()" class="flex flex-row gap-3 overflow-x-auto ">
+      </section>
     </article>
-  </section>
+
+
+
+    <section id="movies-category-container">
+      <article onscroll="" class="flex flex-col px-5 py-5 w-full">
+        <h1 id="header-title--category" class="text-white inactive font-bold text-xl "></h1>
+        <section onscroll="" id="movies-category-cards" class="flex flex-1 gap-3 flex-wrap justify-center "></section>
+      </article>
+
+    </section>
+
+    <section id="movies-search-container">
+      <article onscroll="" class="flex flex-col px-5 py-5 w-full">
+        <h1 id="header-title--search" class="text-white inactive font-bold text-xl "></h1>
+        <section onscroll="" id="movies-search-cards" class="flex flex-row gap-3 flex-wrap "></section>
+      </article>
+
+    </section>
+  </main>
+
 
 
   <script src="./src/secrets.js"></script>

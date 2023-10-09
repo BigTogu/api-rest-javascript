@@ -96,3 +96,11 @@
   animation: rotateCardOut 0.3s ease-in-out;
   animation-fill-mode: forwards;
 }
+
+.inactive {
+  display: none !important;
+}
+
+.cut-corner {
+  clip-path: polygon(45% 0, 100% 0, 100% 100%, 0% 100%);
+}
