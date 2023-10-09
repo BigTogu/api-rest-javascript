@@ -15,6 +15,7 @@ function navigator() {
   if (location.hash.startsWith("#trends")) {
     trendsPage();
   } else if (location.hash.startsWith("#search")) {
+    console.log("Hola");
     searchPage();
   } else if (location.hash.startsWith("#movie=")) {
     movieDetailsPage();
@@ -75,6 +76,7 @@ function searchPage() {
 
   //añadir titulo categoria
   headerCategoryTitle.innerHTML = searchInput.value;
+  getMoviesBySearch(query);
 }
 
 function trendsPage() {}

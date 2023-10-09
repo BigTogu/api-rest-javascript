@@ -157,7 +157,6 @@ async function getCategoriesMovies() {
   });
 }
 
-//crear el html de la nueva sección y hacer función reutilizable
 async function getFilteredCategory(categoryId) {
   const res = await fetch(
     `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&with_genres=${categoryId}`
@@ -173,6 +172,7 @@ async function getMoviesBySearch(query) {
     `https://api.themoviedb.org/3/search/movie?query=${query}&api_key=${API_KEY}`
   );
   const data = await res.json();
+
   const movies = data.results;
   console.log(movies, "movies");
 
